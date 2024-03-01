@@ -1,6 +1,6 @@
 import Link from "next/link";
 import React from "react";
-import ToggleMode from "../ToggleMode";
+import ToggleMode from "./ToggleMode";
 
 function MainNav() {
   return (
