@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "./ui/form";
 import { Input } from "./ui/input";
 import {
@@ -16,16 +16,37 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
+import { Button } from "./ui/button";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 type TicketFormData = z.infer<typeof ticketSchema>;
 
 const TicketForm = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  const router = useRouter();
+
   const form = useForm<TicketFormData>({
     resolver: zodResolver(ticketSchema),
   });
 
   async function onSubmit(values: TicketFormData) {
-    console.log(values);
+    try {
+      setIsSubmitting(true);
+      setError("");
+      await axios.post("/api/tickets", values);
+      setIsSubmitting(false);
+      router.push("/tickets");
+      router.refresh();
+    } catch (error) {
+      setError("Unknow error occurred. Please try again.");
+      setIsSubmitting(false);
+    }
+  }
+
+  function onCancel() {
+    router.push("/tickets");
   }
 
   return (
@@ -42,7 +63,11 @@ const TicketForm = () => {
               <FormItem>
                 <FormLabel>Ticket Title</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="Ticket title..." />
+                  <Input
+                    {...field}
+                    defaultValue={field.value}
+                    placeholder="Ticket title..."
+                  />
                 </FormControl>
               </FormItem>
             )}
@@ -103,6 +128,18 @@ const TicketForm = () => {
                 </FormItem>
               )}
             />
+          </div>
+          <div className="flex space-x-4">
+            <Button type="submit" disabled={isSubmitting}>
+              Create Ticket
+            </Button>
+            <Button
+              variant="secondary"
+              disabled={isSubmitting}
+              onClick={onCancel}
+            >
+              Cancel
+            </Button>
           </div>
         </form>
       </Form>
