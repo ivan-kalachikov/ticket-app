@@ -10,6 +10,7 @@ import React from "react";
 import { Ticket } from "@prisma/client";
 import TicketStatusBadge from "@/components/TicketStatusBadge";
 import TicketPriority from "@/components/TicketPriority";
+import Link from "next/link";
 
 interface Props {
   tickets: Ticket[];
@@ -30,7 +31,9 @@ function DataTable({ tickets }: Props) {
         <TableBody>
           {tickets.map((ticket) => (
             <TableRow key={ticket.id}>
-              <TableCell>{ticket.title}</TableCell>
+              <TableCell>
+                <Link href={`/tickets/edit/${ticket.id}`}>{ticket.title}</Link>
+              </TableCell>
               <TableCell className="text-center">
                 <TicketStatusBadge status={ticket.status} />
               </TableCell>
