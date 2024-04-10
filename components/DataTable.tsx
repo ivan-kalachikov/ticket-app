@@ -26,13 +26,14 @@ function DataTable({ tickets }: Props) {
             <TableHead className="text-center">Status</TableHead>
             <TableHead className="text-center">Priority</TableHead>
             <TableHead>Updated At</TableHead>
+            <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {tickets.map((ticket) => (
             <TableRow key={ticket.id}>
               <TableCell>
-                <Link href={`/tickets/edit/${ticket.id}`}>{ticket.title}</Link>
+                <Link href={`/tickets/${ticket.id}`}>{ticket.title}</Link>
               </TableCell>
               <TableCell className="text-center">
                 <TicketStatusBadge status={ticket.status} />
@@ -49,6 +50,9 @@ function DataTable({ tickets }: Props) {
                   minute: "2-digit",
                   hour12: true,
                 })}
+              </TableCell>
+              <TableCell>
+                <Link href={`/tickets/edit/${ticket.id}`}>Edit</Link>
               </TableCell>
             </TableRow>
           ))}
