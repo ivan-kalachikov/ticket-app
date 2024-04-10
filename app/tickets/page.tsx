@@ -8,7 +8,7 @@ async function Tickets() {
   const tickets = await prisma.ticket.findMany();
 
   return (
-    <div className="w-full">
+    <div className="w-full pb-10">
       <Link
         href="/tickets/new"
         className={`mb-6 ${buttonVariants({ variant: "default" })}`}

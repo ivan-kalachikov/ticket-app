@@ -28,7 +28,7 @@ interface Props {
 }
 
 function TicketForm({ ticket }: Props) {
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
 
@@ -38,25 +38,36 @@ function TicketForm({ ticket }: Props) {
 
   async function onSubmit(values: TicketFormData) {
     try {
-      setIsSubmitting(true);
+      setIsPending(true);
       setError("");
       if (!ticket) {
         await axios.post("/api/tickets", values);
       } else {
         await axios.patch(`/api/tickets/${ticket.id}`, values);
       }
-      setIsSubmitting(false);
+      setIsPending(false);
       router.push("/tickets");
       router.refresh();
     } catch (error) {
       setError("Unknow error occurred. Please try again.");
-      setIsSubmitting(false);
+      setIsPending(false);
     }
   }
 
-  function onCancel() {
+  const onCancel = () => {
     router.push("/tickets");
-  }
+  };
+
+  const onDelete = async () => {
+    if (!ticket) {
+      return;
+    }
+    setIsPending(true);
+    await axios.delete(`/api/tickets/${ticket.id}`);
+    setIsPending(false);
+    router.push("/tickets");
+    router.refresh();
+  };
 
   return (
     <div className="rounded-md w-full border p-4">
@@ -139,14 +150,19 @@ function TicketForm({ ticket }: Props) {
             />
           </div>
           <div className="flex space-x-4">
-            <Button type="submit" disabled={isSubmitting}>
+            <Button type="submit" disabled={isPending}>
               {!ticket ? "Create Ticket" : "Update Ticket"}
             </Button>
-            <Button
-              variant="secondary"
-              disabled={isSubmitting}
-              onClick={onCancel}
-            >
+            {ticket && (
+              <Button
+                disabled={isPending}
+                onClick={onDelete}
+                variant="destructive"
+              >
+                Delete
+              </Button>
+            )}
+            <Button variant="ghost" disabled={isPending} onClick={onCancel}>
               Cancel
             </Button>
           </div>
