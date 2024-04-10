@@ -11,6 +11,7 @@ import { Ticket } from "@prisma/client";
 import TicketStatusBadge from "@/components/TicketStatusBadge";
 import TicketPriority from "@/components/TicketPriority";
 import Link from "next/link";
+import { formatDate } from "@/app/utils/date";
 
 interface Props {
   tickets: Ticket[];
@@ -41,16 +42,7 @@ function DataTable({ tickets }: Props) {
               <TableCell className="text-center">
                 <TicketPriority priority={ticket.priority} />
               </TableCell>
-              <TableCell>
-                {ticket.updatedAt.toLocaleString("en-US", {
-                  year: "2-digit",
-                  month: "2-digit",
-                  day: "2-digit",
-                  hour: "numeric",
-                  minute: "2-digit",
-                  hour12: true,
-                })}
-              </TableCell>
+              <TableCell>{formatDate(ticket.updatedAt)}</TableCell>
               <TableCell>
                 <Link href={`/tickets/edit/${ticket.id}`}>Edit</Link>
               </TableCell>
