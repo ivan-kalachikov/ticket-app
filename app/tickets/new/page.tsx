@@ -5,12 +5,12 @@ const TicketForm = dynamic(() => import("@/components/TicketForm"), {
   ssr: false,
 });
 
-const NewTicket = () => {
+function NewTicket() {
   return (
     <div>
       <TicketForm />
     </div>
   );
-};
+}
 
 export default NewTicket;

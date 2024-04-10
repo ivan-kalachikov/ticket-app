@@ -27,7 +27,7 @@ interface Props {
   ticket?: Ticket;
 }
 
-const TicketForm = ({ ticket }: Props) => {
+function TicketForm({ ticket }: Props) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const router = useRouter();
@@ -154,6 +154,6 @@ const TicketForm = ({ ticket }: Props) => {
       </Form>
     </div>
   );
-};
+}
 
 export default TicketForm;
