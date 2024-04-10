@@ -13,11 +13,10 @@ import {
 import { formatDate } from "@/app/utils/date";
 import TicketStatusBadge from "./TicketStatusBadge";
 import TicketPriority from "./TicketPriority";
-import Link from "next/link";
-import { Button, buttonVariants } from "./ui/button";
+import { Button } from "./ui/button";
 import ReactMarkdown from "react-markdown";
-import axios from "axios";
 import { useRouter } from "next/navigation";
+import DeleteTicketButton from "./DeleteTicketButton";
 
 interface Props {
   ticket: Ticket;
@@ -26,14 +25,6 @@ interface Props {
 function TicketDetails({ ticket }: Props) {
   const router = useRouter();
   const [isPending, setIsPending] = useState(false);
-
-  const onDelete = async () => {
-    setIsPending(true);
-    await axios.delete(`/api/tickets/${ticket.id}`);
-    setIsPending(false);
-    router.push("/tickets");
-    router.refresh();
-  };
 
   return (
     <div className="flex gap-6 flex-col lg:flex-row px-4 xl:px-0">
@@ -60,9 +51,7 @@ function TicketDetails({ ticket }: Props) {
         >
           Edit
         </Button>
-        <Button disabled={isPending} onClick={onDelete} variant="destructive">
-          Delete
-        </Button>
+        <DeleteTicketButton ticketId={ticket.id} setIsPending={setIsPending} />
         <Button
           onClick={() => router.push("/tickets")}
           disabled={isPending}

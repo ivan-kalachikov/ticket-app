@@ -20,6 +20,7 @@ import { Button } from "./ui/button";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Ticket } from "@prisma/client";
+import DeleteTicketButton from "./DeleteTicketButton";
 
 type TicketFormData = z.infer<typeof ticketSchema>;
 
@@ -154,13 +155,10 @@ function TicketForm({ ticket }: Props) {
               {!ticket ? "Create Ticket" : "Update Ticket"}
             </Button>
             {ticket && (
-              <Button
-                disabled={isPending}
-                onClick={onDelete}
-                variant="destructive"
-              >
-                Delete
-              </Button>
+              <DeleteTicketButton
+                ticketId={ticket.id}
+                setIsPending={setIsPending}
+              />
             )}
             <Button variant="ghost" disabled={isPending} onClick={onCancel}>
               Cancel
